@@ -139,7 +139,7 @@ public class DoubleSeekBar extends View {
     private void drawLine(Canvas canvas) {
         lineLength = getWidth();
         //为最左最右 留出文字和mark空间
-        lineStartX = dp2px(20);
+        lineStartX = dp2px(40);
         lineLength -= lineStartX * 2;
         spaceValuePx = lineLength / 100;
         //减去1刻度,因为实际上是 99段
@@ -199,13 +199,22 @@ public class DoubleSeekBar extends View {
                 (int) (selStartX + size[0] / 2),
                 (int) (pointStartY - markerMarginTop)
         );
-        canvas.drawBitmap(bgNumbBitmap, bgNumbSrcRect, leftNumbRect, bitmapPaint);
 
         Rect rightNumbRect = new Rect((int) (selEndX + lineWidth / 2 - size[0] / 2),
                 (int) (pointStartY - markerMarginTop - size[1]),
                 (int) (selEndX + lineWidth / 2 + size[0] / 2),
                 (int) (pointStartY - markerMarginTop)
         );
+        //左边数值和右边数值重叠的像素
+//        if (leftNumbRect.right > rightNumbRect.left) {
+//            int fix = leftNumbRect.right - rightNumbRect.left;
+//            leftNumbRect.left = leftNumbRect.left - fix / 2 - 1;
+//            leftNumbRect.right = leftNumbRect.right - fix / 2 - 1;
+//            rightNumbRect.right = rightNumbRect.right + fix / 2 + 1;
+//            rightNumbRect.left = rightNumbRect.left + fix / 2 + 1;
+//        }
+
+        canvas.drawBitmap(bgNumbBitmap, bgNumbSrcRect, leftNumbRect, bitmapPaint);
         canvas.drawBitmap(bgNumbBitmap, bgNumbSrcRect, rightNumbRect, bitmapPaint);
         //画数值
         float v = numbPaint.measureText(curMinValue + "K");
@@ -283,15 +292,27 @@ public class DoubleSeekBar extends View {
      * @return -1 没有击中操作点,0 最小值,1最大值
      */
     public boolean checkEventType(MotionEvent event) {
-        if (rightMoveRect.contains((int) event.getX() + 1, (int) event.getY() + 1)) {
-            eventType = 1;
-            return true;
+        if (curMinValue > 90) {
+            if (leftMoveRect.contains((int) event.getX() + 1, (int) event.getY() + 1)) {
+                eventType = 0;
+                return true;
+            }
+
+            if (rightMoveRect.contains((int) event.getX() + 1, (int) event.getY() + 1)) {
+                eventType = 1;
+                return true;
+            }
+        } else {
+            if (rightMoveRect.contains((int) event.getX() + 1, (int) event.getY() + 1)) {
+                eventType = 1;
+                return true;
+            }
+            if (leftMoveRect.contains((int) event.getX() + 1, (int) event.getY() + 1)) {
+                eventType = 0;
+                return true;
+            }
         }
 
-        if (leftMoveRect.contains((int) event.getX() + 1, (int) event.getY() + 1)) {
-            eventType = 0;
-            return true;
-        }
         eventType = -1;
         return false;
     }
@@ -305,8 +326,6 @@ public class DoubleSeekBar extends View {
         this.curMaxValue = curMaxValue;
         postInvalidate();
     }
-
-
 
 
     public int getCurMaxValue() {
