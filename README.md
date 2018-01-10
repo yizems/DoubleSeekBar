@@ -39,6 +39,8 @@
 
 ## 依赖
 
+[![](https://jitpack.io/v/yizeliang/DoubleSeekBar.svg)](https://jitpack.io/#yizeliang/DoubleSeekBar)
+
 ```gradle
 
 	allprojects {
