@@ -206,13 +206,13 @@ public class DoubleSeekBar extends View {
                 (int) (pointStartY - markerMarginTop)
         );
         //左边数值和右边数值重叠的像素
-//        if (leftNumbRect.right > rightNumbRect.left) {
-//            int fix = leftNumbRect.right - rightNumbRect.left;
-//            leftNumbRect.left = leftNumbRect.left - fix / 2 - 1;
-//            leftNumbRect.right = leftNumbRect.right - fix / 2 - 1;
-//            rightNumbRect.right = rightNumbRect.right + fix / 2 + 1;
-//            rightNumbRect.left = rightNumbRect.left + fix / 2 + 1;
-//        }
+        if (leftNumbRect.right > rightNumbRect.left) {
+            int fix = leftNumbRect.right - rightNumbRect.left;
+            leftNumbRect.left = leftNumbRect.left - fix / 2 - 1;
+            leftNumbRect.right = leftNumbRect.right - fix / 2 - 1;
+            rightNumbRect.right = rightNumbRect.right + fix / 2 + 1;
+            rightNumbRect.left = rightNumbRect.left + fix / 2 + 1;
+        }
 
         canvas.drawBitmap(bgNumbBitmap, bgNumbSrcRect, leftNumbRect, bitmapPaint);
         canvas.drawBitmap(bgNumbBitmap, bgNumbSrcRect, rightNumbRect, bitmapPaint);

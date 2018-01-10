@@ -4,7 +4,6 @@
 
 ## 使用方法
 
-
 ```xml
 
     <cn.yzl.android.doubleseekbar.DoubleSeekBar
@@ -37,6 +36,9 @@
 ### 1.0.2
 
 - 文字重叠解决(下面的mark点还没有解决)
+
+![1.png](https://i.loli.net/2018/01/10/5a55e3afa24c7.png)
+![2.png](https://i.loli.net/2018/01/10/5a55e3afafe64.png)
 
 ### 1.0.1
 
