@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
@@ -58,6 +60,8 @@ public class DoubleSeekBar extends View {
     public MoveListener moveListener;
     public ChangedListener changedListener;
 
+    boolean overlNumber = true;
+
 
     public DoubleSeekBar(Context context) {
         super(context);
@@ -107,6 +111,8 @@ public class DoubleSeekBar extends View {
         bitmapPaint = new Paint();
         bitmapPaint.setDither(true);
         bitmapPaint.setAntiAlias(true);
+        bitmapPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DARKEN));
+
     }
 
     @Override
@@ -206,21 +212,21 @@ public class DoubleSeekBar extends View {
                 (int) (pointStartY - markerMarginTop)
         );
         //左边数值和右边数值重叠的像素
-        if (leftNumbRect.right > rightNumbRect.left) {
-            int fix = leftNumbRect.right - rightNumbRect.left;
-            leftNumbRect.left = leftNumbRect.left - fix / 2 - 1;
-            leftNumbRect.right = leftNumbRect.right - fix / 2 - 1;
-            rightNumbRect.right = rightNumbRect.right + fix / 2 + 1;
-            rightNumbRect.left = rightNumbRect.left + fix / 2 + 1;
+        if (!overlNumber) {
+            if (leftNumbRect.right > rightNumbRect.left) {
+                int fix = leftNumbRect.right - rightNumbRect.left;
+                leftNumbRect.left = leftNumbRect.left - fix / 2 - 1;
+                leftNumbRect.right = leftNumbRect.right - fix / 2 - 1;
+                rightNumbRect.right = rightNumbRect.right + fix / 2 + 1;
+                rightNumbRect.left = rightNumbRect.left + fix / 2 + 1;
+            }
         }
-
         canvas.drawBitmap(bgNumbBitmap, bgNumbSrcRect, leftNumbRect, bitmapPaint);
-        canvas.drawBitmap(bgNumbBitmap, bgNumbSrcRect, rightNumbRect, bitmapPaint);
-        //画数值
+        //画左边的数值
         float v = numbPaint.measureText(curMinValue + "K");
-
         canvas.drawText(curMinValue + "K", leftNumbRect.centerX() - v / 2, leftNumbRect.centerY() + dp2px(3), numbPaint);
-
+        canvas.drawBitmap(bgNumbBitmap, bgNumbSrcRect, rightNumbRect, bitmapPaint);
+        //画右边的数值
         v = numbPaint.measureText(curMaxValue + "K");
         canvas.drawText(curMaxValue + "K", rightNumbRect.centerX() - v / 2, rightNumbRect.centerY() + dp2px(3), numbPaint);
     }
@@ -347,14 +353,14 @@ public class DoubleSeekBar extends View {
     /**
      * 移动中
      */
-    interface MoveListener {
+    public interface MoveListener {
         void move(int min, int max);
     }
 
     /**
      * 结束滑动后
      */
-    interface ChangedListener {
+    public interface ChangedListener {
         void changed(int min, int max);
     }
 
@@ -378,4 +384,12 @@ public class DoubleSeekBar extends View {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, getContext().getResources().getDisplayMetrics());
     }
+
+    /**
+     * 是否重叠数值区域
+     */
+    public void setOverlNumber(boolean overlNumber) {
+        this.overlNumber = overlNumber;
+    }
+
 }

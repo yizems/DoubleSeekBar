@@ -32,6 +32,11 @@
 
 ## 更新日志
 
+### 1.0.3
+
+- 加入一个参数setOverlNumber,控制1.0.2的效果
+- 修复两个数值View 重叠时候 显示混乱的问题,现在是一个盖住另一个
+- 修复监听接口 没有public
 
 ### 1.0.2
 
@@ -59,7 +64,7 @@
 	}
 
 	dependencies {
-    	compile 'com.github.yizeliang:DoubleSeekBar:1.0.0'
+    	compile 'com.github.yizeliang:DoubleSeekBar:1.0.3'
     }
 
 ```
